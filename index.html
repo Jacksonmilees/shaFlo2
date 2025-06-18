@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShaFlo</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icons/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="./icons/app-icon-192.png">
+  <meta name="theme-color" content="#F472B6">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif; /* A nice default sans-serif font */
+    }
+    /* Custom scrollbar for a softer look */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #fda4af; /* Tailwind rose-300 */
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #f472b6; /* Tailwind pink-400 */
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'bloom-bg': '#FFF0F5', // Lavender Blush
+            'bloom-primary': '#F472B6', // Pink 400
+            'bloom-secondary': '#FDA4AF', // Rose 300
+            'bloom-accent': '#A78BFA', // Violet 400
+            'bloom-text-light': '#4A5568', // Gray 700
+            'bloom-text-dark': '#2D3748',  // Gray 800
+            'bloom-period': '#F43F5E', // Rose 600
+            'bloom-fertile': '#34D399', // Emerald 400
+            'bloom-ovulation': '#8B5CF6', // Violet 500
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            cursive: ['Pacifico', 'cursive'],
+          },
+        }
+      }
+    }
+  </script>
+  <script>
+    // Shim process.env for browser environment if it doesn't exist
+    if (typeof window.process === 'undefined') {
+      window.process = { env: {} };
+    } else if (typeof window.process.env === 'undefined') {
+      window.process.env = {};
+    }
+    // The actual API_KEY is expected to be populated by the execution environment.
+    // This shim just ensures `process.env` exists as an object to avoid TypeErrors
+    // when scripts attempt to access `process.env.API_KEY`.
+  </script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.5.1",
+    "@/App": "./App.tsx",
+    "@/": "./"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-bloom-bg text-bloom-text-dark">
+  <div id="root"></div>
+  <script type="module" src="./index.tsx"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(registration => {
+            console.log('ShaFlo ServiceWorker registration successful with scope: ', registration.scope);
+          })
+          .catch(error => {
+            console.log('ShaFlo ServiceWorker registration failed: ', error);
+          });
+      });
+    }
+  </script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
