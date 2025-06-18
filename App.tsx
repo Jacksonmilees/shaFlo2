@@ -7,6 +7,7 @@ import { CalendarGrid } from './components/CalendarGrid';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { WellnessAssistant } from './components/WellnessAssistant';
 import { MoodLogger } from './components/MoodLogger'; // Import MoodLogger
+import { WellnessStories } from './components/WellnessStories';
 import { CalendarIcon } from './components/icons/CalendarIcon';
 import { ChatBubbleIcon } from './components/icons/ChatBubbleIcon';
 import { HeartIcon } from './components/icons/HeartIcon'; // Import HeartIcon
@@ -143,7 +144,7 @@ const App: React.FC = () => {
             </SectionWrapper>
           </div>
 
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6 md:space-y-8">
             <SectionWrapper icon={<CalendarIcon className="w-6 h-6 text-bloom-primary"/>} title="Monthly Overview">
               <CalendarGrid 
                 periodLogs={periodLogs} 
@@ -151,6 +152,10 @@ const App: React.FC = () => {
                 moodLogs={moodLogs}
                 getMoodLogForDate={getMoodLogForDate}
               />
+            </SectionWrapper>
+
+            <SectionWrapper icon={<ChatBubbleIcon className="w-6 h-6 text-bloom-accent"/>} title="Wellness Stories">
+              <WellnessStories />
             </SectionWrapper>
           </div>
         </div>

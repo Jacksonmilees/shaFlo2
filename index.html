@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ShaFlo</title>
   <link rel="manifest" href="./manifest.json">
-  <link rel="icon" href="./icons/favicon.png" type="image/png">
+  <link rel="icon" href="./icons/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./icons/app-icon-192.png">
   <meta name="theme-color" content="#F472B6">
 
@@ -51,6 +51,15 @@
             sans: ['Inter', 'sans-serif'],
             cursive: ['Pacifico', 'cursive'],
           },
+          keyframes: {
+            'fade-in': {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            }
+          },
+          animation: {
+            'fade-in': 'fade-in 0.5s ease-in-out',
+          }
         }
       }
     }

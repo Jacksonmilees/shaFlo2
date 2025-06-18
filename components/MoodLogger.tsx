@@ -1,40 +1,79 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { MoodLog } from '../types';
 import { MOOD_OPTIONS } from '../constants';
-import { formatISODate, parseISODate } from '../services/dateUtils.ts'; // For today's date
+import { parseISODate } from '../services/dateUtils';
 
 interface MoodLoggerProps {
-  todayMoodLog?: MoodLog; // Mood log for the current day
+  todayMoodLog?: MoodLog;
   addMoodLog: (date: string, mood: string, note?: string) => void;
-  currentDate: string; // ISO string YYYY-MM-DD, should be today
+  currentDate: string;
 }
 
 export const MoodLogger: React.FC<MoodLoggerProps> = ({ todayMoodLog, addMoodLog, currentDate }) => {
   const [selectedMood, setSelectedMood] = useState<string>(todayMoodLog?.mood || '');
   const [note, setNote] = useState<string>(todayMoodLog?.note || '');
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmationTimeout, setConfirmationTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // Update local state if the prop for today's mood log changes
-    // This can happen if logs are loaded/updated after initial render
     setSelectedMood(todayMoodLog?.mood || '');
     setNote(todayMoodLog?.note || '');
   }, [todayMoodLog]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (confirmationTimeout) {
+        clearTimeout(confirmationTimeout);
+      }
+    };
+  }, [confirmationTimeout]);
+
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedMood) {
       alert("Please select a mood, my love.");
       return;
     }
+
+    // Clear any existing timeout
+    if (confirmationTimeout) {
+      clearTimeout(confirmationTimeout);
+    }
+
     addMoodLog(currentDate, selectedMood, note);
-    // Optional: Add a gentle confirmation message or effect here
-  };
+    
+    // Show confirmation
+    setShowConfirmation(true);
+    
+    // Clear inputs if it's a new entry
+    if (!todayMoodLog) {
+      setSelectedMood('');
+      setNote('');
+    }
+    
+    // Set new timeout and store it
+    const timeout = setTimeout(() => {
+      setShowConfirmation(false);
+      setConfirmationTimeout(null);
+    }, 1500); // Reduced to 1.5 seconds for better UX
+
+    setConfirmationTimeout(timeout);
+  }, [selectedMood, note, currentDate, todayMoodLog, addMoodLog, confirmationTimeout]);
   
   const currentDisplayDate = parseISODate(currentDate);
 
-
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg">
+    <div className="bg-white p-6 rounded-xl shadow-lg relative overflow-hidden">
+      {showConfirmation && (
+        <div className="absolute inset-0 bg-green-50/90 flex items-center justify-center rounded-xl animate-fade-in z-10">
+          <div className="text-center transform transition-all duration-300">
+            <span className="text-4xl mb-2 block animate-bounce" role="img" aria-label="Success">✨</span>
+            <p className="text-bloom-primary font-semibold">Mood saved successfully!</p>
+          </div>
+        </div>
+      )}
+      
       <h2 className="text-xl font-semibold text-bloom-text-dark mb-1">How are you feeling today, my dearest Sharlene?</h2>
       <p className="text-sm text-bloom-text-light mb-4">
         Logging for: <span className="font-medium">{currentDisplayDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' })}</span>
