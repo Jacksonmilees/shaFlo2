@@ -12,7 +12,7 @@ interface CalendarGridProps {
 }
 
 const DayCell: React.FC<{ dayInfo: DayInfo }> = ({ dayInfo }) => {
-  let cellClasses = "h-16 w-full flex flex-col items-center justify-center rounded-lg transition-all duration-200 ease-in-out text-sm relative aspect-square "; // aspect-square for better proportions
+  let cellClasses = "h-16 w-full flex flex-col items-center justify-center rounded-lg transition-all duration-200 ease-in-out text-sm relative aspect-square ";
   let dayNumberContainerClasses = "font-medium "; 
 
   if (!dayInfo.isCurrentMonth) {
@@ -21,14 +21,14 @@ const DayCell: React.FC<{ dayInfo: DayInfo }> = ({ dayInfo }) => {
   } else {
     cellClasses += "bg-white hover:shadow-md ";
     if (dayInfo.isPeriodDay) {
-      cellClasses += "bg-bloom-period/80 text-white ";
-      dayNumberContainerClasses += "font-semibold";
+      cellClasses += "bg-red-200 ";
+      dayNumberContainerClasses += "font-semibold text-red-700";
     } else if (dayInfo.isOvulationDay) {
-      cellClasses += "bg-bloom-ovulation/80 text-white ";
-      dayNumberContainerClasses += "font-semibold";
+      cellClasses += "bg-purple-200 ";
+      dayNumberContainerClasses += "font-semibold text-purple-700";
     } else if (dayInfo.isFertileDay) {
-      cellClasses += "bg-bloom-fertile/70 text-white ";
-      dayNumberContainerClasses += "font-semibold";
+      cellClasses += "bg-green-200 ";
+      dayNumberContainerClasses += "font-semibold text-green-700";
     } else {
       dayNumberContainerClasses += "text-bloom-text-dark";
     }
@@ -38,7 +38,6 @@ const DayCell: React.FC<{ dayInfo: DayInfo }> = ({ dayInfo }) => {
     cellClasses += " ring-2 ring-bloom-accent "; 
     dayNumberContainerClasses = `bg-bloom-accent text-white rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm ${!dayInfo.isCurrentMonth ? 'opacity-90' : ''}`;
   }
-
 
   return (
     <div className={cellClasses}>
